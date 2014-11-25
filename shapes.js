@@ -44,13 +44,13 @@
 			}
 		}).
 		method('setX', function (x) {
-			if (!Utilities.isNumber(x)) {
+			if (!Utilities.isFinite(x)) {
 				throw new TypeError("Parameter to X coordinate must be a number");
 			}
 			this.x = Math.round(x);
 		}).
 		method('setY', function (y) {
-			if (!Utilities.isNumber(y)) {
+			if (!Utilities.isFinite(y)) {
 				throw new TypeError("Parameter to Y coordinate must be a number");
 			}
 			this.y = Math.round(y);
@@ -70,7 +70,7 @@
 		}).
 		method('setRotationAngle', function (rotationAngle) {
 			// in radians (has no meaning for Circle and Point despite its being inherited)
-			this.rotationAngle = (rotationAngle && Utilities.isNumber(rotationAngle)) || Math.PI * Utilities.getRandomInt(0, 360) / 180;
+			this.rotationAngle = (rotationAngle && Utilities.isFinite(rotationAngle)) || Math.PI * Utilities.getRandomInt(0, 360) / 180;
 		}).
 		method('annotate', function() {
 			if (!this.annotationMode) return;
