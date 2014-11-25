@@ -57,11 +57,12 @@
 	};
 
 	/** 
-	 * Checks if given arg is a number. Explicitly check for NaN and exclude from results,
-	 * since the following expression is (sadly) true: typeof NaN === 'number'	// true
+	 * A utility function checking if the arg is a finite number (not null, not infinity nor any other type of
+     * primitive type or object). If there is the native implementation of window.isFinite() it is used instead of 
+     * our own function.
 	 */
-	app.util.isNumber = function (n) {
-		return (typeof n === "number" && !Number.isNaN(n));
+	app.util.isFinite = window.isFinite || function (n) {
+		return typeof n === "number" && !(isNaN(n) || n === Infinity);
 	};
 
 }(app));
