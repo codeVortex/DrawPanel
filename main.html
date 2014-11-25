@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>DrawPanel demo</title>
+		<link rel="icon" type="image/jpg" href="favicon.jpg">
+		<!-- The 'Amble' font type used on this page was downloaded from Font Squirrel-->
+		<link rel="stylesheet" href="fontface/amble_bold_macroman/stylesheet.css">
+		<link rel="stylesheet" href="fontface/amble_bolditalic_macroman/stylesheet.css">		
+		<link rel="stylesheet" href="fontface/amble_italic_macroman/stylesheet.css">
+		<link rel="stylesheet" href="fontface/amble_light_macroman/stylesheet.css">
+		<link rel="stylesheet" href="fontface/amble_lightcondensed_macroman/stylesheet.css">
+		<link rel="stylesheet" href="fontface/amble_lightcondenseditalic_macroman/stylesheet.css">
+		<link rel="stylesheet" href="fontface/amble_lightitalic_macroman/stylesheet.css">
+		<link rel="stylesheet" href="fontface/amble_regular_macroman/stylesheet.css">
+		<link rel="stylesheet" href="style.css">
+		<script>
+			var app = {};
+			// System execution starts here
+			window.onload = function () {
+				"use strict";
+				app.init();
+			};
+		</script>
+		<script src="util.js"></script>
+		<script src="shapes.js"></script>
+		<script src="system.js"></script>
+	</head>
+
+	<body>
+		<div id="wrapper">
+
+			<h1 id="title">A DrawPanel demo featuring HTML5 canvas</h1>
+			<h2 id="subtitle">and scripted in vanilla JavaScript</h2>
+			
+			<div id="purpose">
+				<h2>Purpose</h2>
+				<p>
+				This little demo features advanced JavaScript aspects by implementing a 2d canvas capable of rendering basic shapes. 
+				Despite the fact that there are CSS gems in the style.css file, the main focus is JavaScript.
+				This little app has it all: namespace management, event handling, prototypal inheritance demonstrated through 
+				a custom object hierarchy, augmentation ofbuilt-in objects.</p>
+				<p>
+				I prefer to employ the <span class="code">"use strict";</span> pragma to strengthen my code against insidious 
+				bugs that type coercions and auto-assignments that the EcmaScript paradigm introduces. 
+				I include two informational links to support this notion:
+				<ol>
+					<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope/Strict_mode">Mozilla Developer Network (MDN)</a></li>
+					<li><a href="http://www.nczonline.net/blog/2012/03/13/its-time-to-start-using-javascript-strict-mode/">N.Zacka's website</a></li>
+				</ol>
+				</p>
+				<p>
+				Following lies a list of features that are demonstrated with this little demo and some relevant references to back my work 
+				and the techniques employed. Most of my inspiration and solutions comes from an excellent JavaScript manual called 
+				<a href="http://www.wrox.com/WileyCDA/WroxTitle/Professional-JavaScript-for-Web-Developers-3rd-Edition.productCd-1118222199.html">Professional JavaScript 
+				for Web Developers 3rd ed.</a>, by <a href="http://www.nczonline.net/">Nicholas Zackas</a>,
+				as well as my primary online guide-reference-aid-help resource of <a href="http://www.stackoverflow.com">StackOverflow</a> website.
+				</p>
+				<dl>
+				
+				<dt>Custom reference types</dt>
+				<dd>
+				It is quite obvious that the notion of <em>Shape</em> is used heavily throughout this app. It goes without saying that Shape is implemented as a custom
+				reference type, with its own constructor and public methods. In strict OO languages (e.g. <strong>Java</strong>) <em>Shape</em> would be an abstract class since each shape has its 
+				own unique implementation of the <span class="code">draw()</span> function. In JavaScript we use other practices which manipulate the prototype object and which are
+				leads us to...
+				</dd>
+				
+				<dt>Inheritance management in JavaScript</dt>
+				<dd>
+				Subclassing in JavaScript can be quite challenging since several object-oriented concepts which are solid for strict OO languages, such 
+				as Java and C#, are more fluid here. Continuing our previous example of the <em>Shape</em> custom type, we had to find a way to establish 
+				a type of inheritance in order to share the common properties and functionalities among different shapes, but provide each one with its own
+				private properties and unique implementation of functionalities. Thus, I employed the <strong>parasitic combination inheritance</strong> pattern
+				as presented by N.Zackas in his book <em>Professional JavaScript for Web Developers</em> (p.214). This pattern enables subtypes to inherit 
+				the prototype of a supertype, while preserving the reference to their own prototype. This way we establish a neat hierarchy and maintain a 
+				consistent response from <span class="keyword">instanceof</span> calls (they return <span class="keyword">true</span> for "Object", "Shape" 
+				and the current shape we are drawing).
+				</dd>
+				
+				<dt>Global Object augmentation through prototype</dt>
+				<dd>Occasionally we might need to augment the global functionality of a built-in type, such as Array or Object, in order to implement our
+				ingenious ideas. While built-in types are immutable in traditional OO languages, in JavaScript it is quite trivial to attach properties and 
+				methods to the prototype of a built-in type and use them normally thereafter. This is what I did in our example in the case of 
+				<span class="code">Object.prototype.getType()</span> function. This one enables <em>all</em> objects in our code to query themselves about
+				their own type. This is how I populate the <em>Shape Registry</em>'s Type column: <span class="code">shape.getType()</span>.</dd>
+				
+				<dt>Event handling</dt>					
+				<dd>You will notice that I use a event delegation whenever possible. I implement
+				one handler to manage multiple events from similar controls. Should we use discreet functions for each 
+				control, the memory cost and performance impact would be greater as each function in JavaScript is an object. The
+				less we have instantiated at any time, the better both in terms of performance and memory leaking issues.
+				</dd>
+				
+				<dt>Error handling</dt>
+				<dd>
+					Errors are an indispensable mechanism in JavaScript to deal with its lenient nature when dealing with object references
+					of different types and various silent conversions. For example, using them regularly in the beginning of function bodies, we are guaranteed
+					that the argument passed is of the correct type. If not execution is stopped and an error is thrown, usually with a more user-friendly explanation.
+					Debugging becomes significantly easier to tackle.
+				</dd>
+				
+				<dt>Graphics implementation</dt>
+				<dd>Canvas is an indispensable element in HTML5. It is powerful enough to handle all types of graphics, from simple 2d shapes, as in our
+				example, to complex 3d ones and even animations. Although I only scratch the surface of its potential here, there is a solid display of its 2d capabilities
+				along with some basic transformations (rotation).</dd>
+				
+				<dt>Tables</dt>
+				<dd>Tables are ideal to manage tabular data. Our collection of shapes with their own unique properties is a perfect candidate to display their potential.
+				The <em>Shapes Registry</em> is styled in <strong>style.css</strong> and manipulated via our script's functions <span class="code">insertShapesRegistryRow()</span>,
+				<span class="code">clearShapesRegistry()</span> and <span class="code">refreshShapesRegistry()</span>.
+				</dd>
+				
+				<dt>Helper functions</dt>
+				<dd>
+				Small utility functions that either clarify our intentions and improve readability or prevent code duplication, are
+				essential in all programming languages, JavaScript included. Such examples in our system are the functions <span class="code">getRandomInt()</span> and
+				<span class="code">getRandomColor()</span>.
+				</dd>
+				</dl>
+			</div>
+			
+			<div id="canvasPane">
+				<h2>The canvas</h2>
+				<quote>
+				<p>Click on the canvas to draw new shapes. Tweak the controls to alter the rendering.</p>
+				<canvas id="drawPanel" width="724px" height="400px">
+					<!--
+					we must provide explicitly the dimensions of canvas element as attributes on the element
+					and not via CSS; otherwise it will be scaled and the rendered graphics will be distorted 
+					and blurred. More information on URL:
+					https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Canvas_tutorial/Basic_usage
+					-->
+				</canvas>
+			</div>
+			
+			<div id="controls">
+				<h2>Controls</h2>
+				<form>
+					<ul>
+						<li title="Enhances drawn shapes with an extra label that provides details about the object per se"><label for="annotationMode" >Annotation mode</label><input name="annotationMode" id="annotationMode" type="checkbox" value="annotationMode"></li>
+						<li title="Enables random colors in drawn objects apart from the default black"><label for="colorMode" >Color mode</label><input name="colorMode" id="colorMode" type="checkbox" value="colorMode"></li>
+						<li title="Selects the next shape to be drawn"><label for="shapeSelector" >Shape selector&nbsp;</label><select name="shapeSelector" id="shapeSelector"></select></li>
+					</ul>
+					<ul id="buttonStrip">
+						<li title="Toggles the annotation mode on drawn shapes"><button id="toggleAnnotations">Toggle Annotations</button></li>
+						<li title="Toggles the color mode on drawn shapes"><button id="toggleColors">Toggle Colors</button></li>
+						<li title="Clears the canvas and the shapes registry"><button id="resetCanvas">Clear Canvas</button></li>
+					</ul>
+				</form>
+			</div>
+			
+			<div id="shapes">
+				<h2>Shapes Registry</h2>
+				<table id="shapesRegistry">
+					<caption>Details on rendered Shapes</caption>
+					<thead>
+						<tr>
+							<th rowspan="2">#</th>
+							<th rowspan="2">Type</th>
+							<th colspan="2">Canvas coordinates</th>
+							<th rowspan="2">Color</th>
+							<th rowspan="2">Annotated</th>
+							<th rowspan="2">Measurement</th>
+						</tr>
+						
+						<tr>
+							<th>X</th>
+							<th>Y</th>							
+						</tr>
+					</thead>
+					<tfoot></tfoot>
+					<tbody></tbody>
+				</table>
+			</div>
+			
+			<footer>
+				<h6>Thanos Kontis 2014</h6>
+			</footer>
+		</div>		
+	</body>
+</html>
