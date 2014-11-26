@@ -9,4 +9,4 @@ The app has been tested in Firefox 33, Chrome with no known issues. IE does not 
 updated to accommodate this requirement.
 
 Also extended controls for the canvas are going to be implemented. For the time being the shapes' properties are randomized 
-on each click, but with the aid of the new controls they will be customizable.
+on each click, but with the aid of the new controls they will be fully customizable.
